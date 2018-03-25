@@ -62,8 +62,8 @@ Story
 As a site user, I need to be able to view the books of the inventory so that I can use these resources to do my job better.
 
 Acceptance Criteria
-	- A site user can view all of the books on a single page, post or widget
-	- A site user can view a single book page including all details about the book
+	- A site user can view all of the books on a single page, post or widget - DO THIS WITH CUSTOM PAGE TEMPLATE - DONE
+	- A site user can view a single book page including all details about the book - DO THIS WITH CUSTOM POSTs - DONE
 
 Custom Template Page
 The “books” custom post type will require a custom template for rendering the book items. The custom template page should render the book

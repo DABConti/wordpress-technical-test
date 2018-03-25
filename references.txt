@@ -1,3 +1,5 @@
 https://code.tutsplus.com/tutorials/a-guide-to-wordpress-custom-post-types-creation-display-and-meta-boxes--wp-27645
 
 https://wordpress.stackexchange.com/questions/163541/inserting-a-term-into-a-custom-taxonomy
+
+http://www.wpexplorer.com/wordpress-page-templates-plugin/
