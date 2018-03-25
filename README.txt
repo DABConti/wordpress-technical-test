@@ -33,9 +33,9 @@ Story
 As a site administrator, I need to be able to enter new books into the inventory so that my audiences can find them in the site.  
 
 Acceptance Criteria
-	- A site administrator can add a new book with title, description, and thumbnail
-	- A site administrator can revert back to a previous version of the book
-	- Each book has an author name, release year and publisher
+	- A site administrator can add a new book with title, description, and thumbnail - DONE
+	- A site administrator can revert back to a previous version of the book - DONE
+	- Each book has an author name, release year and publisher - Done
 
 —Requirements: Administrative View (WordPress Backend) Instructions-
 

@@ -108,11 +108,11 @@ function create_books() {
 function book_genre_init() {
 	// create a new taxonomy
 	register_taxonomy(
-		'book_genre',
+		'book-genre',
 		'books',
 		array(
 			'label' => __( 'Book Genre' ),
-			'rewrite' => array( 'slug' => 'book_genre' )
+			'rewrite' => array( 'slug' => 'book-genre' )
 		)
 	);
 
@@ -120,17 +120,17 @@ function book_genre_init() {
 
 	wp_insert_term(
 			'Technical Documentation',
-			'book_genre'
+			'book-genre'
 		);
 
 	wp_insert_term(
 			'Coding Standards',
-			'book_genre'
+			'book-genre'
 		);
 
 	wp_insert_term(
 			'Easy Reading',
-			'book_genre'
+			'book-genre'
 		);
 
 }
@@ -162,7 +162,7 @@ function display_book_author_meta_box( $books ) {
         </tr>
         <tr>
             <td style="width: 100%">Release Year</td>
-            <td><input type="number" size="4" name="book_release_year" value="<?php echo $release_year; ?>" /></td>
+            <td><input type="number" size="8" min="0" max="2100" name="book_release_year" value="<?php echo $release_year; ?>" /></td>
         </tr>
         <tr>
             <td style="width: 100%">Publisher</td>
