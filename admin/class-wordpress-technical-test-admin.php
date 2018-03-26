@@ -52,18 +52,28 @@ class WordPress_Technical_Test_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		//Add the action for loading the custom page template from the plugin to the theme
+		//	This is used to create a gallary of all the books in a page by selecting a template
 		add_action( 'plugins_loaded', array( 'BooksTemplate', 'get_instance' ) );
 
+		//Add the action to create the books custom post types
 		add_action( 'init', 'create_books' );
 
+		//Add the action to create the custom book taxonomies
 		add_action( 'init', 'book_genre_init' );
 
+		//Add the action to create the custom meta field for a book
 		add_action ('admin_init', 'book_meta_field');
 
+		//Add the action for POSTing the custom data in the meta fields
 		add_action ('save_post', 'add_book_fields', 10, 2);
 
+		//Add the action that loads the template for a single book.  This overrides 
+		//	the default post functionality for an individual books custom post type
 		add_filter ('template_include', 'include_book_template_function', 1);
 
+		//Adds the shortcode [books]/[books id="[post id]"] to load a galery 
+		//	of all books or a single one
 		add_shortcode('books', 'books_shortcode');
 
 
@@ -288,6 +298,10 @@ class BooksTemplate {
 
 }
 
+/**
+ *	Creates the Books Custom Post type
+ *
+ */
 function create_books() {
     register_post_type( 'books',
         array(
@@ -317,6 +331,11 @@ function create_books() {
     );
 }
 
+/**
+ *	Creates the custom taxonomy, book-genre for the Books Custom Post type
+ *	It also prepopulates it with 3 initial genres
+ *
+ */
 function book_genre_init() {
 	// create a new taxonomy
 	register_taxonomy(
@@ -347,6 +366,10 @@ function book_genre_init() {
 
 }
 
+/**
+ *	Creates the box for the meta fields for the author, release year and publisher
+ *
+ */
 function book_meta_field() {
 	add_meta_box( 'book_meta_box',
         'Book Details',
@@ -357,8 +380,15 @@ function book_meta_field() {
     );
 }
 
+
+/**
+ *	Populates the meta box with the proper fields and configures these correctly.
+ *
+ *	Here we also limit the release year to a min of year 0 and a max of year 2100 
+ *		and also ensure that it is a numeric value
+ */
 function display_book_author_meta_box( $books ) {
-    // Retrieve current name of the Director and Movie Rating based on review ID
+    // Retrieve current values for these meta fields
     $author_name = esc_html( get_post_meta( $books->ID, 'author_name', true ) );;
     $release_year = intval( get_post_meta( $books->ID, 'release_year', true ) );;
     $publisher = esc_html( get_post_meta( $books->ID, 'publisher', true ) );;
@@ -381,6 +411,13 @@ function display_book_author_meta_box( $books ) {
     <?php
 }
 
+/**
+ *	Here we post any data filled into these fields to the back end database
+ *
+ *	@param $book_id int
+ *  @param $book object
+ *
+ */
 function add_book_fields ($book_id, $book){
 	//check post type for books
 	if ( $book->post_type == 'books') {
@@ -397,6 +434,13 @@ function add_book_fields ($book_id, $book){
 	}
 }
 
+/**
+ *	Handler for adding the single-book-template template to override the default post functionality
+ *		for displaying a single book.  We need this to display all the custom meta fields as well as
+ *		any taxonomies
+ *
+ *	@param $template_path
+ */
 function include_book_template_function ($template_path) {
 	if (get_post_type() == 'books') {
 		//if the query for an existing single post
@@ -409,29 +453,16 @@ function include_book_template_function ($template_path) {
 	return $template_path;
 }
 
-function custom_taxonomies_terms_links() {
-    global $post, $post_id;
-    // get post by post id
-    $post = &get_post($post->ID);
-    // get post type by post
-    $post_type = $post->post_type;
-    // get post type taxonomies
-    $taxonomies = get_object_taxonomies($post_type);
-    $out = "<ul>";
-    foreach ($taxonomies as $taxonomy) {        
-        $out .= "<li>".$taxonomy.": ";
-        // get the terms related to post
-        $terms = get_the_terms( $post->ID, $taxonomy );
-        if ( !empty( $terms ) ) {
-            foreach ( $terms as $term )
-                $out .= '<a href="' .get_term_link($term->slug, $taxonomy) .'">'.$term->name.'</a> ';
-        }
-        $out .= "</li>";
-    }
-    $out .= "</ul>";
-    return $out;
-}
-
+/**
+ *	Handler adding a [books] shortcode that displays either a galary of all books or a singular one.
+ *
+ *	This could probibly be refactored as it copies most of its code from gallery-books-template, but
+ *		At the time I could not figure out how to import a new template correctly using get_template_part
+ *
+ *	@param $atts input attribute that allows a user to use the shortcode like [books id="X"] where X
+ *		is a post id of a books custom post type.  This will cause the shortcode to display that one 
+ *		book
+ */
 function books_shortcode($atts) {
 	//turn on output buffering
 	$a = shortcode_atts( array(
@@ -454,7 +485,7 @@ function books_shortcode($atts) {
 			<header class="entry-header">
 				<?php
 					$page_id = get_the_ID();
-					if(!is_null($a['id']) and $page_id != $a['id'])
+					if(!is_null($a['id']) and $page_id != intval($a['id']))
 					{
 						continue;
 					}
@@ -498,9 +529,6 @@ function books_shortcode($atts) {
 
 		</article>
 	<?php endwhile; ?>
-	
-
-
 	<?php
 	wp_reset_query();
 	return ob_get_clean();

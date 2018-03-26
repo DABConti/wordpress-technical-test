@@ -1,11 +1,20 @@
 === Plugin Name ===
-Contributors: Province of British Columbia
+Contributors: Province of British Columbia and Daniel Conti - d.a.b.conti@gmail.com
 Donate link: https://www2.gov.bc.ca/
 Requires at least: 3.0.1
 Tested up to: 4.9
 Stable tag: 4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+=== Plugin Usage ===
+
+This plugin provides 3 notible features
+
+	* The books custom post type - a custom post type that stores and configures any number of books
+	* A book custom post template - a template that overrides the default post behaviour to display a book 		and its relivent details (genre, author, release year and publisher)
+	* A custom page template Book Gallery - this can be added to a page to display a gallery of all books
+	* A shortcode [books] that can display a gallery anywere a shortcode is applicable.  It can also be called with a single id, using [books id="X"] where X is a post ID of a books type.  This will display only one book. 
 
 Welcome to the WordPress technical test for the IS24R Web Technical Analyst position, within the Government Digital Experience Division, Government Communications & Public Engagement, with the Province of British Columbia.  The test is looking to not only assess your technical skill set, but to provide you with the opportunity to showcase your creativity, resourcefulness and solution way finding.
 
